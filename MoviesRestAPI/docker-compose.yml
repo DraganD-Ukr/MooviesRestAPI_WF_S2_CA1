@@ -1,0 +1,16 @@
+﻿services:
+  db:
+    image: postgres:latest
+    container_name: moviesdb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: movies
+    ports:
+      - "5432:5432"
+    volumes:
+      - movies_db_data:/var/lib/postgresql/data
+
+volumes:
+  movies_db_data:
+    driver: local
