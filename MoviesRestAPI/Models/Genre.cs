@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MoviesRestAPI.Models;
 
@@ -12,5 +13,6 @@ public class Genre
     public required string Name { get; set; }
 
     // (1 -> Many relationship)
-    public required ICollection<Movie> Movies { get; set; }
+    [JsonIgnore]
+    public ICollection<Movie>? Movies { get; set; } = new List<Movie>(); 
 }

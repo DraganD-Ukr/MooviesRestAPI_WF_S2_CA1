@@ -23,5 +23,5 @@ public class Movie
     public int GenreId { get; set; }
 
     // Navigation Property
-    public required Genre Genre { get; set; }
+    public Genre? Genre { get; set; }
 }

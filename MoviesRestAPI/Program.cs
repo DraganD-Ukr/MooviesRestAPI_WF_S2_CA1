@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoviesRestAPI.Models;
+using MoviesRestAPI.Service;
+using MoviesRestAPI.Service.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register the MovieService for Dependency Injection
+builder.Services.AddScoped<IMovieService, MovieServiceImpl>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
