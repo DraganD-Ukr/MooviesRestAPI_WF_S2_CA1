@@ -72,8 +72,7 @@ public class MoviesController : ControllerBase {
         return Ok(result);  // If movie was successfully updated, return the updated movie
     }
 
-    [HttpDelete("{id}")]
-    [Route("{id:int}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteMovie([FromRoute] int id)
     {
         if (id <= 0) {

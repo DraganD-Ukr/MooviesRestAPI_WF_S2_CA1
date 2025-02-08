@@ -93,8 +93,27 @@ public class MovieServiceImpl:IMovieService {
 
         _context.Movies.Add(movie);
         await _context.SaveChangesAsync();
+        
+        // Fetch the movie ID from the database to ensure it's saved
+        var savedMovie = await _context.Movies
+            .Where(m => m.Title == movieRequest.Title && m.ReleaseYear == movieRequest.ReleaseYear && m.GenreId == genre.Id)
+            .OrderByDescending(m => m.Id) // In case of duplicates, get the latest one
+            .FirstOrDefaultAsync();
 
-        return new StatusCodeResult(StatusCodes.Status201Created);
+        if (savedMovie == null)
+        {
+            return new ObjectResult(new {message="Failed to save movie"}) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+        
+        var response = new MovieResponse(
+            savedMovie.Id,
+            savedMovie.Title,
+            savedMovie.ReleaseYear,
+            savedMovie.Description,
+            new GenreResponse(savedMovie.GenreId, genre.Name)
+        );
+
+        return new CreatedAtActionResult("CreateMovie", "movies", new { id = savedMovie.Id }, response);
     }
 
     
@@ -159,7 +178,7 @@ public class MovieServiceImpl:IMovieService {
     public async Task<IActionResult> DeleteMovieAsync(int id) {
         
         var movie = await _context.Movies.FindAsync(id);
-        if (movie == null) return new BadRequestObjectResult(new { message = "Movie with id "+id+" not found" });;
+        if (movie == null) return new NotFoundObjectResult(new { message = "Movie with id " + id + " does not exist" });
 
         _context.Movies.Remove(movie);
         await _context.SaveChangesAsync();

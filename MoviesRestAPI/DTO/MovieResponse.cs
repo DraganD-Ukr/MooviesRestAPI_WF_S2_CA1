@@ -12,6 +12,8 @@
 
         public GenreResponse Genre { get; set; }
 
+        public MovieResponse() {}
+        
         // Constructor to initialize all properties
         public MovieResponse(int id, string title, int releaseYear, string description, GenreResponse genre)
         {
